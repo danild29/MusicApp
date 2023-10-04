@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicPlayer.MainPage"
+             xmlns:vm="clr-namespace:MusicPlayer"
+             x:DataType="vm:MainViewMode"
+             Title="Star 3000">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="AUTO" />
+            </Grid.RowDefinitions>
+
+            <VerticalStackLayout Spacing="25" BackgroundColor="Grey" Padding="30,10" VerticalOptions="Center" Grid.Row="0">
+                <Label Text="{ Binding Message}" TextColor="Red" FontSize="23"/>
+            </VerticalStackLayout>
+
+            <RefreshView Grid.Row="1">
+                <!--IsRefreshing="{Binding IsRefreshing}" Command="{Binding LoadEventsCommand}">-->
+                <CollectionView ItemsSource="{Binding Songs}" SelectionMode="None" >
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="0" Orientation="Vertical"/>
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate >
+                        <DataTemplate x:DataType="vm:Song">
+                            <Frame Padding="10" >
+
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewMode}}, Path=SelectSongCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+
+
+                                    <StackLayout Grid.Column="0" VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding Name}"/>
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="1"  VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding Author}"/>
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="2"  VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding Album}"/>
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="3"  VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding Duration}"/>
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="4"  VerticalOptions="CenterAndExpand" Margin="5">
+                                        
+                                        <Button BackgroundColor="Transparent" TextColor="Wheat" Text="Change"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewMode}}, Path=ChangeSongCommand}"
+                                                CommandParameter="{Binding .}"/>
+
+                                    </StackLayout>
+
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+
+            <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center" Grid.Row="2">
+
+                <Slider Value="{Binding ValueSlider}" DragCompleted="OnSliderValueChanged"/>
+
+
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Text=">=" Grid.Column="0" Command="{Binding ToggleSongCommand}" />
+
+                    <Button Text="SaveNewSong me" Grid.Column="1" Command="{Binding SaveNewSongCommand}"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+
+</ContentPage>
